@@ -1,0 +1,53 @@
+name: Preparar fotos e videos
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "lote-*/**"
+      - ".github/scripts/processar.py"
+      - ".github/workflows/midia.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: midia
+  cancel-in-progress: false
+
+jobs:
+  preparar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Instalar ferramentas
+        run: |
+          pip install --quiet pillow pillow-heif
+          which ffmpeg || (sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg)
+
+      - name: Processar
+        run: python .github/scripts/processar.py
+
+      - name: Publicar
+        run: |
+          git config user.name "Atualizador do site"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A midia midia.json
+          if git diff --cached --quiet; then
+            echo "Nada novo."
+            exit 0
+          fi
+          git commit -q -m "Atualiza fotos e videos dos lotes"
+          for i in 1 2 3; do
+            git pull --rebase -q origin main && git push -q origin HEAD:main && exit 0
+            sleep 5
+          done
+          exit 1
