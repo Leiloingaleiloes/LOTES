@@ -34,5 +34,14 @@
    }
   ],
   "videos": []
+ },
+ "25": {
+  "fotos": [
+   {
+    "src": "midia/lote-25/teste-automatico-e2788121.jpg",
+    "mini": "midia/lote-25/teste-automatico-e2788121-mini.jpg"
+   }
+  ],
+  "videos": []
  }
 }
