@@ -84,8 +84,7 @@ def cabecalho(c, W, H, pagina, total_pag):
         c.drawImage(logo, 36, H - 30 - lw * 136 / 510, lw, lw * 136 / 510)
         c.setFillColor(white)
         c.setFont("Titulo", 23)
-        c.drawRightString(W - 36, H - 46, "ORDEM DE ENTRADA")
-        c.drawRightString(W - 36, H - 72, "NA PISTA")
+        c.drawRightString(W - 36, H - 62, "ORDEM DE ENTRADA")
         c.setFont("Titulo", 15)
         c.drawString(36, H - 106, EVENTO.upper())
         # etiquetas com local e horário
@@ -105,7 +104,7 @@ def cabecalho(c, W, H, pagina, total_pag):
         c.drawImage(logo, 36, H - 18 - lw * 136 / 510, lw, lw * 136 / 510)
         c.setFillColor(white)
         c.setFont("Titulo", 16)
-        c.drawRightString(W - 36, H - 42, "ORDEM DE ENTRADA NA PISTA")
+        c.drawRightString(W - 36, H - 42, "ORDEM DE ENTRADA")
     c.setFillColor(CINZA)
     c.setFont("Corpo", 9)
     c.drawCentredString(W / 2, 22, "Leiloingá Leilões  ·  página %d de %d" % (pagina, total_pag))
@@ -142,7 +141,7 @@ def gerar():
 
     saida = os.path.join(RAIZ, "ordem-de-entrada.pdf")
     c = canvas.Canvas(saida, pagesize=A4)
-    c.setTitle("Ordem de entrada na pista · Leiloingá Leilões")
+    c.setTitle("Ordem de entrada · Leiloingá Leilões")
     c.setAuthor("Leiloingá Leilões")
     pos = 0
     for i, grupo in enumerate(paginas, 1):
