@@ -1,38 +1,6 @@
 {
- "1": {
-  "fotos": [
-   {
-    "src": "midia/lote-01/foto-1-1-f451d415.jpg",
-    "mini": "midia/lote-01/foto-1-1-f451d415-mini.jpg"
-   }
-  ],
-  "videos": []
- },
- "2": {
-  "fotos": [
-   {
-    "src": "midia/lote-02/foto-2-1-371e91b2.jpg",
-    "mini": "midia/lote-02/foto-2-1-371e91b2-mini.jpg"
-   }
-  ],
-  "videos": []
- },
- "3": {
-  "fotos": [
-   {
-    "src": "midia/lote-03/foto-3-1-e2788121.jpg",
-    "mini": "midia/lote-03/foto-3-1-e2788121-mini.jpg"
-   }
-  ],
-  "videos": []
- },
  "4": {
-  "fotos": [
-   {
-    "src": "midia/lote-04/foto-4-1-432c4b61.jpg",
-    "mini": "midia/lote-04/foto-4-1-432c4b61-mini.jpg"
-   }
-  ],
+  "fotos": [],
   "videos": [
    {
     "src": "midia/lote-04/video-lote-04-f180b44d.mp4",
