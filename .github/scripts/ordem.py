@@ -137,7 +137,7 @@ def gerar():
         resto = resto[k:]
         p += 1
     # rodapé com totais precisa de espaço na última página
-    if len(paginas[-1]) > cabe(len(paginas)) - 2:
+    if len(paginas[-1]) > cabe(len(paginas)) - 3:
         paginas.append([])
 
     saida = os.path.join(RAIZ, "ordem-de-entrada.pdf")
@@ -190,10 +190,21 @@ def gerar():
                     x += w
                 y -= lin_h
         if i == len(paginas):
-            cab = sum(int(lotes[n]["qtde"]) for n in ordem if lotes[n]["qtde"].isdigit())
+            def soma(f):
+                return sum(int(lotes[n]["qtde"]) for n in ordem if lotes[n]["qtde"].isdigit() and f(lotes[n]))
+            cab = soma(lambda d: True)
+            mac = soma(lambda d: d["sexo"].lower().startswith("m"))
+            fem = soma(lambda d: d["sexo"].lower().startswith("f"))
+            c.setStrokeColor(VERDE)
+            c.setLineWidth(1.2)
+            c.line(x0, y - 8, x0 + largura, y - 8)
             c.setFillColor(VERDE)
             c.setFont("Titulo", 12)
-            c.drawString(x0, y - 26, "TOTAL: %d LOTES  ·  %d CABEÇAS" % (len(ordem), cab))
+            c.drawString(x0, y - 28, "TOTAL: %d LOTES  ·  %d CABEÇAS" % (len(ordem), cab))
+            c.setFillColor(TEXTO)
+            c.setFont("Titulo", 12)
+            c.drawString(x0, y - 48, "MACHOS: %d" % mac)
+            c.drawString(x0 + 150, y - 48, "FÊMEAS: %d" % fem)
         c.showPage()
     c.save()
     print("ok:", saida, "ordem:", ordem)
