@@ -61,9 +61,10 @@
       var nums = {};
       Object.keys(dados).forEach(function (n) { nums[n] = 1; });
       Object.keys(midia).forEach(function (n) { nums[n] = 1; });
-      /* só aparecem no site os lotes que já têm vídeo */
+      /* só aparecem no site os lotes que já têm vídeo ou foto */
       var lista = Object.keys(midia).filter(function (n) {
-        return midia[n] && midia[n].videos && midia[n].videos.length;
+        var m = midia[n] || {};
+        return (m.videos && m.videos.length) || (m.fotos && m.fotos.length);
       }).map(Number).sort(function (a, b) { return a - b; });
       return { lista: lista, dados: dados, midia: midia };
     });
