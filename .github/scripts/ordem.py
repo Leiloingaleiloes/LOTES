@@ -171,7 +171,7 @@ def gerar():
                 c.line(x0, y - lin_h, x0 + largura, y - lin_h)
                 qt = d["qtde"].zfill(2) if d["qtde"].isdigit() else d["qtde"]
                 pe = d["peso"] + " kg" if re.fullmatch(r"\d+([.,]\d+)?", d["peso"]) else d["peso"]
-                vals = [str(pos) + "º", str(n), d["raca"], d["idade"], d["sexo"], qt, pe]
+                vals = [str(pos) + "º", "%02d" % n, d["raca"], d["idade"], d["sexo"], qt, pe]
                 x = x0
                 for j, ((_, w, al), v) in enumerate(zip(COLS, vals)):
                     if j == 1:
