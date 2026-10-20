@@ -78,3 +78,9 @@ a.zapsec svg{width:22px;height:22px;flex:none}
 .lb button{position:fixed;z-index:51;border:0;background:rgba(255,255,255,.9);color:#12261a;font-size:26px;line-height:1;width:46px;height:46px;border-radius:50%;cursor:pointer}
 .lb .x{top:12px;right:12px}.lb .pv{left:10px;top:50%}.lb .nx{right:10px;top:50%}
 .lb .ct{position:fixed;left:50%;transform:translateX(-50%);bottom:14px;color:#fff;font-size:14px;z-index:51;background:rgba(0,0,0,.5);padding:3px 12px;border-radius:999px}
+
+.pdf b{flex:1 0 100%;margin:0}
+.pdf .bts{display:flex;flex-wrap:wrap;gap:8px;width:100%}
+.pdf .bts a{padding:8px 12px;font-size:14px}
+.pdf .bts a.zp{background:#fff;color:#15803d;border-color:#1FAF55}
+.pdf .bts a.zp svg{width:18px;height:18px}
