@@ -76,7 +76,7 @@
   }
 
   var SITE = "https://leiloingaleiloes.github.io/LOTES/";
-  var EVENTO = "Feira Especial de Gado de Corte";
+  var EVENTO = "7º Leilão das Águas – Gado de Corte";
 
   function compartilhar(texto, rotulo) {
     return '<a class="zapsec" href="https://wa.me/?text=' + encodeURIComponent(texto) +
