@@ -118,7 +118,7 @@
   }
 
   window.montarIndice = function (alvo) {
-    Promise.all([carregar(), buscar("ordem.txt")]).then(function (res) {
+    Promise.all([carregar(), buscar("ordem.txt").catch(function () { return ""; })]).then(function (res) {
       var b = res[0];
       if (!b.lista.length) {
         alvo.innerHTML = '<div class="vazio">Os lotes aparecem aqui em breve.</div>';
