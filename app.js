@@ -158,8 +158,8 @@
       '<label class="busca">' + I.busca + '<input id="q" type="search" placeholder="Buscar lote, raça, peso…" aria-label="Buscar lotes"></label>' +
       '<div class="chips"><button class="chip" data-sexo="" aria-pressed="true">Todos</button>' +
       sexos.map(function (s) { return '<button class="chip" data-sexo="' + esc(s) + '" aria-pressed="false">' + esc(s) + "</button>"; }).join("") +
-      (temVideo && semVideo ? '<button class="chip" id="f-video" aria-pressed="false">Com vídeo</button>' : "") +
-      sel("f-raca", racas, "Raça") + sel("f-idade", idades, "Idade") + "</div>" +
+      (temVideo && semVideo ? '<button class="chip" id="f-video" aria-pressed="false">Com vídeo</button>' : "") + "</div>" +
+      '<div class="sels">' + sel("f-raca", racas, "Raça") + sel("f-idade", idades, "Idade") + "</div>" +
       '<div class="contagem"><span id="cont"></span><button type="button" id="limpar" hidden>Limpar filtros</button></div></div>';
   }
 
