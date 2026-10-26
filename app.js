@@ -7,6 +7,8 @@
   var EVENTO = "7º Leilão das Águas – Gado de Corte";
   var PG_LOTE = document.body.getAttribute("data-lote") || "lote.html";
   var PG_INICIO = document.body.getAttribute("data-inicio") || "./";
+  /* modo demonstração: lotes fictícios da pasta demo/ */
+  var DEMO = document.body.hasAttribute("data-demo") ? "demo/" : "";
 
   function buscar(arquivo) {
     var t = "?t=" + Date.now();
@@ -59,7 +61,7 @@
   }
 
   function carregar() {
-    return Promise.all([buscar("lotes.csv"), buscar("midia.json")]).then(function (r) {
+    return Promise.all([buscar(DEMO + "lotes.csv"), buscar(DEMO + "midia.json")]).then(function (r) {
       var dados = lerCsv(r[0]), midia = {};
       try { midia = JSON.parse(r[1] || "{}"); } catch (e) { midia = {}; }
       /* só aparecem os lotes que já têm vídeo ou foto */
@@ -109,7 +111,7 @@
   window.montarInicio = function () {
     var pLotes = document.getElementById("p-lotes"), pOrdem = document.getElementById("p-ordem");
     ligarAbas();
-    Promise.all([carregar(), buscar("ordem.txt")]).then(function (res) {
+    Promise.all([carregar(), buscar(DEMO + "ordem.txt")]).then(function (res) {
       var b = res[0];
       var cont = document.getElementById("n-lotes");
       if (cont) cont.textContent = b.lista.length ? b.lista.length : "";

@@ -1,0 +1,152 @@
+{
+ "1": {
+  "fotos": [
+   {
+    "src": "demo/l1-0.jpg",
+    "mini": "demo/l1-0.jpg"
+   },
+   {
+    "src": "demo/l1-1.jpg",
+    "mini": "demo/l1-1.jpg"
+   }
+  ],
+  "videos": [
+   {
+    "src": "demo/l1.mp4",
+    "capa": "demo/l1-0.jpg"
+   }
+  ]
+ },
+ "2": {
+  "fotos": [
+   {
+    "src": "demo/l2-0.jpg",
+    "mini": "demo/l2-0.jpg"
+   },
+   {
+    "src": "demo/l2-1.jpg",
+    "mini": "demo/l2-1.jpg"
+   }
+  ],
+  "videos": []
+ },
+ "3": {
+  "fotos": [
+   {
+    "src": "demo/l3-0.jpg",
+    "mini": "demo/l3-0.jpg"
+   },
+   {
+    "src": "demo/l3-1.jpg",
+    "mini": "demo/l3-1.jpg"
+   }
+  ],
+  "videos": [
+   {
+    "src": "demo/l3.mp4",
+    "capa": "demo/l3-0.jpg"
+   }
+  ]
+ },
+ "4": {
+  "fotos": [
+   {
+    "src": "demo/l4-0.jpg",
+    "mini": "demo/l4-0.jpg"
+   },
+   {
+    "src": "demo/l4-1.jpg",
+    "mini": "demo/l4-1.jpg"
+   }
+  ],
+  "videos": []
+ },
+ "5": {
+  "fotos": [
+   {
+    "src": "demo/l5-0.jpg",
+    "mini": "demo/l5-0.jpg"
+   },
+   {
+    "src": "demo/l5-1.jpg",
+    "mini": "demo/l5-1.jpg"
+   }
+  ],
+  "videos": []
+ },
+ "6": {
+  "fotos": [
+   {
+    "src": "demo/l6-0.jpg",
+    "mini": "demo/l6-0.jpg"
+   },
+   {
+    "src": "demo/l6-1.jpg",
+    "mini": "demo/l6-1.jpg"
+   }
+  ],
+  "videos": [
+   {
+    "src": "demo/l6.mp4",
+    "capa": "demo/l6-0.jpg"
+   }
+  ]
+ },
+ "7": {
+  "fotos": [
+   {
+    "src": "demo/l7-0.jpg",
+    "mini": "demo/l7-0.jpg"
+   },
+   {
+    "src": "demo/l7-1.jpg",
+    "mini": "demo/l7-1.jpg"
+   }
+  ],
+  "videos": []
+ },
+ "8": {
+  "fotos": [
+   {
+    "src": "demo/l8-0.jpg",
+    "mini": "demo/l8-0.jpg"
+   },
+   {
+    "src": "demo/l8-1.jpg",
+    "mini": "demo/l8-1.jpg"
+   }
+  ],
+  "videos": [
+   {
+    "src": "demo/l8.mp4",
+    "capa": "demo/l8-0.jpg"
+   }
+  ]
+ },
+ "9": {
+  "fotos": [
+   {
+    "src": "demo/l9-0.jpg",
+    "mini": "demo/l9-0.jpg"
+   },
+   {
+    "src": "demo/l9-1.jpg",
+    "mini": "demo/l9-1.jpg"
+   }
+  ],
+  "videos": []
+ },
+ "10": {
+  "fotos": [
+   {
+    "src": "demo/l10-0.jpg",
+    "mini": "demo/l10-0.jpg"
+   },
+   {
+    "src": "demo/l10-1.jpg",
+    "mini": "demo/l10-1.jpg"
+   }
+  ],
+  "videos": []
+ }
+}
