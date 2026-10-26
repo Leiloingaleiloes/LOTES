@@ -200,3 +200,8 @@ footer{max-width:1100px;margin:10px auto 0;padding:0 16px 24px;text-align:center
   .filtros .busca{grid-area:busca}.filtros .chips{grid-area:chips}.filtros .sels{grid-area:sels;margin:0;max-width:460px}
   .filtros .contagem{grid-area:cont}
 }
+
+/* abas com borda: Lotes / Ordem de entrada */
+.abas-in{background:none;padding:0;gap:8px}
+.abas a{border:2px solid var(--brand);background:var(--card);color:var(--brand);border-radius:12px;padding:8px 6px}
+.abas a[aria-current=page]{background:var(--brand);color:#fff;box-shadow:0 2px 6px rgba(28,122,58,.25)}
