@@ -205,3 +205,10 @@ footer{max-width:1100px;margin:10px auto 0;padding:0 16px 24px;text-align:center
 .abas-in{background:none;padding:0;gap:8px}
 .abas a{border:2px solid var(--brand);background:var(--card);color:var(--brand);border-radius:12px;padding:8px 6px}
 .abas a[aria-current=page]{background:var(--brand);color:#fff;box-shadow:0 2px 6px rgba(28,122,58,.25)}
+
+/* vídeos gerais (machos / fêmeas) */
+.vids{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:12px}
+.vid{margin:0;background:var(--card);border-radius:var(--r);overflow:hidden;box-shadow:var(--sombra)}
+.vid figcaption{padding:9px 12px;font-weight:800;font-size:15px;color:var(--brand)}
+.vid video{display:block;width:100%;aspect-ratio:9/16;max-height:75vh;background:#111;object-fit:contain}
+@media (max-width:520px){.vids{grid-template-columns:1fr}}

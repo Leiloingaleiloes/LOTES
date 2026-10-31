@@ -111,21 +111,34 @@
   window.montarInicio = function () {
     var pLotes = document.getElementById("p-lotes"), pOrdem = document.getElementById("p-ordem");
     ligarAbas();
-    Promise.all([carregar(), buscar(DEMO + "ordem.txt")]).then(function (res) {
-      var b = res[0];
+    Promise.all([carregar(), buscar(DEMO + "ordem.txt"), DEMO ? "" : buscar("videos.json")]).then(function (res) {
+      var b = res[0], vids = blocoVideos(res[2]);
       var cont = document.getElementById("n-lotes");
       if (cont) cont.textContent = b.lista.length ? b.lista.length : "";
       pOrdem.innerHTML = montarOrdem(b, res[1]);
       if (!b.lista.length) {
-        pLotes.innerHTML = '<div class="vazio"><b>Os lotes aparecem aqui em breve.</b><span>As fotos e os vídeos são publicados nos dias antes do leilão.</span></div>';
+        pLotes.innerHTML = vids || '<div class="vazio"><b>Os lotes aparecem aqui em breve.</b><span>As fotos e os vídeos são publicados nos dias antes do leilão.</span></div>';
         return;
       }
       var cards = b.lista.map(function (n) { return card(n, b.dados[n] || {}, b.midia[n]); }).join("");
-      pLotes.innerHTML = filtros(b) + '<div class="grade" id="grade">' + cards + "</div>" +
+      pLotes.innerHTML = vids + filtros(b) + '<div class="grade" id="grade">' + cards + "</div>" +
         '<div class="vazio" id="vazio" hidden><b>Nenhum lote com esses filtros.</b></div>';
       ligarFiltros(pLotes);
     });
   };
+
+  /* vídeos gerais (videos.json): machos, fêmeas… */
+  function blocoVideos(txt) {
+    var v = [];
+    try { v = JSON.parse(txt || "[]"); } catch (e) { v = []; }
+    if (!v.length) return "";
+    return '<div class="vids">' + v.map(function (x) {
+      return '<figure class="vid"><figcaption>' + esc(x.titulo) + "</figcaption>" +
+        '<video controls playsinline preload="metadata"' + (x.capa ? ' poster="' + esc(x.capa) + '"' : "") + ">" +
+        '<source src="' + esc(x.src) + '" type="video/mp4"><source src="' + esc(RAW + x.src) + '" type="video/mp4">' +
+        "Seu navegador não toca este vídeo.</video></figure>";
+    }).join("") + "</div>";
+  }
 
   function card(n, d, m) {
     var capa = (m.videos[0] && m.videos[0].capa) || (m.fotos[0] && m.fotos[0].mini) || "";
