@@ -227,7 +227,7 @@
       return "<li>" + (tem ? '<a href="' + linkLote(n) + '">' + corpo + "</a>" : '<div class="sl">' + corpo + "</div>") + "</li>";
     }).join("");
     return '<div class="ordem-topo"><p>Ordem em que os lotes entram na pista. Toque para ver fotos e vídeo.</p>' +
-      '<div class="acoes"><a class="bt" href="ordem-de-entrada.pdf" data-dl="ordem-de-entrada.pdf" download>' + I.pdf + "Baixar PDF</a>" +
+      '<div class="acoes"><a class="bt" href="ordem-de-entrada.pdf?v=1031" target="_blank" rel="noopener">' + I.pdf + "Abrir PDF</a>" +
       '<a class="bt sec" href="' + zapEnviar("Ordem de entrada na pista – " + EVENTO + "\n" + SITE + "ordem-de-entrada.pdf") +
       '" target="_blank" rel="noopener">' + I.zap + "Enviar</a></div></div>" +
       '<ol class="ordem">' + itens + "</ol>";
