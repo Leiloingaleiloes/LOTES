@@ -22,6 +22,8 @@
       .catch(function () { return ""; });
   }
 
+  /* vídeo .mp4 avisa o tipo; .mov (gravado no iPhone) deixa o navegador decidir */
+  function tipoVid(src) { return /\.mp4($|\?)/i.test(src || "") ? ' type="video/mp4"' : ""; }
   function esc(s) {
     return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
       return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
@@ -267,7 +269,7 @@
       if (sub) sub.textContent = [d.raca, d.idade].filter(Boolean).join(" · ") || EVENTO;
       var itens = m.videos.map(function (v) {
         return '<div class="slide"><video controls playsinline preload="metadata"' + (v.capa ? ' poster="' + esc(v.capa) + '"' : "") + ">" +
-          '<source src="' + esc(v.src) + '" type="video/mp4"><source src="' + esc(RAW + v.src) + '" type="video/mp4">' +
+          '<source src="' + esc(v.src) + '"' + tipoVid(v.src) + '><source src="' + esc(RAW + v.src) + '"' + tipoVid(v.src) + '>' +
           "Seu navegador não toca este vídeo.</video></div>";
       }).concat(m.fotos.map(function (f, i) {
         return '<div class="slide">' + img(f.src, "Lote " + n + " foto " + (i + 1), ' class="foto"' + (i ? ' loading="lazy"' : "")) + "</div>";
