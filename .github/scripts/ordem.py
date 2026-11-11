@@ -15,8 +15,8 @@ from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfgen import canvas
 
 RAIZ = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
-EVENTO = "7º Leilão das Águas – Gado de Corte"
-INFO = ["Recinto de Leilões", "Laranjeiras do Sul - PR", "Sábado, 31/10 · 14h30"]
+EVENTO = "Leilão Especial Gado de Corte – Marquinho"
+INFO = ["Recinto Admar Meurer", "Marquinho - PR", "Quarta-feira, 11/11 · 19h30"]
 
 VERDE = HexColor("#0D5D23")
 VERDE_ESC = HexColor("#083F18")
