@@ -4,7 +4,7 @@
   var RAW = "https://raw.githubusercontent.com/Leiloingaleiloes/LOTES/main/";
   var ZAP = "5542998737705";
   var SITE = "https://leiloingaleiloes.github.io/LOTES/";
-  var EVENTO = "7º Leilão das Águas – Gado de Corte";
+  var EVENTO = "Leilão Especial Gado de Corte – Marquinho";
   var PG_LOTE = document.body.getAttribute("data-lote") || "lote.html";
   var PG_INICIO = document.body.getAttribute("data-inicio") || "./";
   /* modo demonstração: lotes fictícios da pasta demo/ */
