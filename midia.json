@@ -1,4 +1,13 @@
 {
+ "8": {
+  "fotos": [],
+  "videos": [
+   {
+    "src": "midia/lote-08/video-b82cdf07.mp4",
+    "capa": "midia/lote-08/video-b82cdf07-capa.jpg"
+   }
+  ]
+ },
  "16": {
   "fotos": [],
   "videos": [
@@ -14,6 +23,24 @@
    {
     "src": "midia/lote-17/video-7d483e09.mp4",
     "capa": "midia/lote-17/video-7d483e09-capa.jpg"
+   }
+  ]
+ },
+ "18": {
+  "fotos": [],
+  "videos": [
+   {
+    "src": "midia/lote-18/video-54cde8e9.mp4",
+    "capa": "midia/lote-18/video-54cde8e9-capa.jpg"
+   }
+  ]
+ },
+ "19": {
+  "fotos": [],
+  "videos": [
+   {
+    "src": "midia/lote-19/video-7bbf0e57.mp4",
+    "capa": "midia/lote-19/video-7bbf0e57-capa.jpg"
    }
   ]
  },
@@ -53,12 +80,30 @@
    }
   ]
  },
+ "29": {
+  "fotos": [],
+  "videos": [
+   {
+    "src": "midia/lote-29/video-50095ddf.mp4",
+    "capa": "midia/lote-29/video-50095ddf-capa.jpg"
+   }
+  ]
+ },
  "30": {
   "fotos": [],
   "videos": [
    {
     "src": "midia/lote-30/video-bdfc88ad.mp4",
     "capa": "midia/lote-30/video-bdfc88ad-capa.jpg"
+   }
+  ]
+ },
+ "31": {
+  "fotos": [],
+  "videos": [
+   {
+    "src": "midia/lote-31/video-15a2064d.mp4",
+    "capa": "midia/lote-31/video-15a2064d-capa.jpg"
    }
   ]
  },
