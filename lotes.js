@@ -76,7 +76,7 @@
   }
 
   var SITE = "https://leiloingaleiloes.github.io/LOTES/";
-  var EVENTO = "Leilão Especial Gado de Corte – Marquinho";
+  var EVENTO = "Leilão Especial Fim de Ano – Gado de Corte – Guaraniaçu";
 
   function compartilhar(texto, rotulo) {
     return '<a class="zapsec" href="https://wa.me/?text=' + encodeURIComponent(texto) +
