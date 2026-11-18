@@ -81,3 +81,4 @@ exclude:
   - lote-80
   - .github
   - README.md
+  - adm-chave.json
