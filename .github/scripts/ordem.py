@@ -6,6 +6,7 @@ entram no final, em ordem numérica. Sem ordem.txt, usa a ordem numérica.
 """
 import os
 import re
+import sys
 
 from reportlab.lib.colors import HexColor, white
 from reportlab.lib.pagesizes import A4
@@ -26,6 +27,27 @@ TEXTO = HexColor("#12261a")
 CINZA = HexColor("#4a5f50")
 LISTRA = HexColor("#eef3ec")
 LINHA = HexColor("#d3ddcf")
+# versão preto e branco (python ordem.py --pb): sem fundos coloridos, só preto, cinza e branco
+PB = "--pb" in sys.argv
+UMA = False  # vira True quando todos os lotes cabem numa folha só (cabeçalho e linhas mais baixos)
+if PB:
+    from reportlab.lib.colors import black
+    VERDE = VERDE_ESC = VERMELHO = TEXTO = black
+    VERDE_VIVO = black
+    CINZA = HexColor("#444444")
+    LISTRA = HexColor("#EDEDED")
+    LINHA = HexColor("#9A9A9A")
+
+
+def logo_img():
+    caminho = os.path.join(RAIZ, "logo-leiloinga.png")
+    if not PB:
+        return ImageReader(caminho)
+    from PIL import Image
+    im = Image.open(caminho).convert("RGBA")
+    fundo = Image.new("RGBA", im.size, (255, 255, 255, 255))
+    fundo.alpha_composite(im)
+    return ImageReader(fundo.convert("L"))
 
 
 def fontes():
@@ -73,28 +95,39 @@ def ler_ordem(lotes):
 
 
 def cabecalho(c, W, H, pagina, total_pag):
-    alt = 150 if pagina == 1 else 70
-    c.setFillColor(VERDE)
-    c.rect(0, H - alt, W, alt, stroke=0, fill=1)
-    c.setFillColor(VERDE_VIVO)
-    c.rect(0, H - alt - 6, W, 6, stroke=0, fill=1)
-    logo = ImageReader(os.path.join(RAIZ, "logo-leiloinga.png"))
+    alt = (104 if UMA else 150) if pagina == 1 else 70
+    if PB:
+        c.setFillColor(black)
+        c.rect(0, H - alt - 3, W, 3, stroke=0, fill=1)
+    else:
+        c.setFillColor(VERDE)
+        c.rect(0, H - alt, W, alt, stroke=0, fill=1)
+        c.setFillColor(VERDE_VIVO)
+        c.rect(0, H - alt - 6, W, 6, stroke=0, fill=1)
+    logo = logo_img()
+    claro = black if PB else white
     if pagina == 1:
-        lw = 190
-        c.drawImage(logo, 36, H - 30 - lw * 136 / 510, lw, lw * 136 / 510)
-        c.setFillColor(white)
-        c.setFont("Titulo", 23)
-        c.drawRightString(W - 36, H - 62, "ORDEM DE ENTRADA")
-        c.setFont("Titulo", 15)
-        c.drawString(36, H - 106, EVENTO.upper())
+        lw = 150 if UMA else 190
+        c.drawImage(logo, 36, H - (20 if UMA else 30) - lw * 136 / 510, lw, lw * 136 / 510)
+        c.setFillColor(claro)
+        c.setFont("Titulo", 21 if UMA else 23)
+        c.drawRightString(W - 36, H - (44 if UMA else 62), "ORDEM DE ENTRADA")
+        c.setFont("Titulo", 13 if UMA else 15)
+        c.drawString(36, H - (76 if UMA else 106), EVENTO.upper())
         # etiquetas com local e horário
-        x, y = 36, H - 136
+        x, y = 36, H - (99 if UMA else 136)
         c.setFont("Corpo", 10.5)
         for i, t in enumerate(INFO):
-            w = pdfmetrics.stringWidth(t, "Corpo", 10.5) + 20
-            c.setFillColor(VERMELHO if i == len(INFO) - 1 else VERDE_ESC)
-            c.roundRect(x, y, w, 19, 9.5, stroke=0, fill=1)
-            c.setFillColor(white)
+            w = pdfmetrics.stringWidth(t, "Negrito" if PB else "Corpo", 10.5) + 20
+            if PB:
+                c.setStrokeColor(black)
+                c.setLineWidth(1)
+                c.roundRect(x, y, w, 19, 9.5, stroke=1, fill=0)
+                c.setFillColor(black)
+            else:
+                c.setFillColor(VERMELHO if i == len(INFO) - 1 else VERDE_ESC)
+                c.roundRect(x, y, w, 19, 9.5, stroke=0, fill=1)
+                c.setFillColor(white)
             if i == len(INFO) - 1:
                 c.setFont("Negrito", 10.5)
             c.drawString(x + 10, y + 6, t)
@@ -102,7 +135,7 @@ def cabecalho(c, W, H, pagina, total_pag):
     else:
         lw = 120
         c.drawImage(logo, 36, H - 18 - lw * 136 / 510, lw, lw * 136 / 510)
-        c.setFillColor(white)
+        c.setFillColor(claro)
         c.setFont("Titulo", 16)
         c.drawRightString(W - 36, H - 42, "ORDEM DE ENTRADA")
     c.setFillColor(CINZA)
@@ -119,13 +152,21 @@ def gerar():
     fontes()
     lotes = ler_lotes()
     ordem = ler_ordem(lotes)
+    global UMA
     W, H = A4
     lin_h, cab_h = 26, 26
+    # tenta tudo numa folha: altura da linha que faz caber (mínimo 14 pt)
+    livre = H - 110 - 14 - 22 - 48 - 46
+    if len(ordem) and livre / len(ordem) >= 14:
+        UMA = True
+        lin_h, cab_h = min(26, livre / len(ordem)), 22
     largura = sum(w for _, w, _ in COLS)
     x0 = (W - largura) / 2
 
     # quantas linhas cabem em cada página
     def cabe(pag):
+        if UMA:
+            return len(ordem) + 3
         topo = H - (156 if pag == 1 else 76) - 22 - cab_h
         return int((topo - 70) // lin_h)
 
@@ -139,13 +180,13 @@ def gerar():
     if len(paginas[-1]) > cabe(len(paginas)) - 3:
         paginas.append([])
 
-    saida = os.path.join(RAIZ, "ordem-de-entrada.pdf")
+    saida = os.path.join(RAIZ, "ordem-de-entrada-pb.pdf" if PB else "ordem-de-entrada.pdf")
     c = canvas.Canvas(saida, pagesize=A4)
     c.setTitle("Ordem de entrada · Leiloingá Leilões")
     c.setAuthor("Leiloingá Leilões")
     pos = 0
     for i, grupo in enumerate(paginas, 1):
-        y = cabecalho(c, W, H, i, len(paginas)) - 22
+        y = cabecalho(c, W, H, i, len(paginas)) - (14 if UMA else 22)
         if grupo:
             c.setFillColor(VERDE)
             c.roundRect(x0, y - cab_h, largura, cab_h, 4, stroke=0, fill=1)
@@ -154,9 +195,9 @@ def gerar():
             x = x0
             for nome, w, al in COLS:
                 if al == "c":
-                    c.drawCentredString(x + w / 2, y - 17, nome)
+                    c.drawCentredString(x + w / 2, y - cab_h / 2 - 3.5, nome)
                 else:
-                    c.drawString(x + 10, y - 17, nome)
+                    c.drawString(x + 10, y - cab_h / 2 - 3.5, nome)
                 x += w
             y -= cab_h
             for n in grupo:
@@ -172,20 +213,22 @@ def gerar():
                 pe = d["peso"] + " kg" if re.fullmatch(r"\d+([.,]\d+)?", d["peso"]) else d["peso"]
                 vals = [str(pos) + "º", "%02d" % n, d["raca"], d["idade"], d["sexo"], qt, pe]
                 x = x0
+                k = min(1.0, lin_h / 26.0) ** 0.4
+                base = y - lin_h / 2 - 4 * k
                 for j, ((_, w, al), v) in enumerate(zip(COLS, vals)):
                     if j == 1:
                         c.setFillColor(VERDE)
-                        c.setFont("Titulo", 13)
+                        c.setFont("Titulo", 13 * k)
                     elif j == 0:
                         c.setFillColor(CINZA)
-                        c.setFont("Negrito", 10.5)
+                        c.setFont("Negrito", 10.5 * k)
                     else:
                         c.setFillColor(TEXTO)
-                        c.setFont("Corpo", 11)
+                        c.setFont("Corpo", 11 * k)
                     if al == "c":
-                        c.drawCentredString(x + w / 2, y - 17.5, v)
+                        c.drawCentredString(x + w / 2, base, v)
                     else:
-                        c.drawString(x + 10, y - 17.5, v)
+                        c.drawString(x + 10, base, v)
                     x += w
                 y -= lin_h
         if i == len(paginas):
