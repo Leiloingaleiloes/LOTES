@@ -12,7 +12,8 @@
   "fotos": [
    {
     "src": "midia/lote-03/foto-429a2773.jpg",
-    "mini": "midia/lote-03/foto-429a2773-mini.jpg"
+    "mini": "midia/lote-03/foto-429a2773-mini.jpg",
+    "oculta": true
    }
   ],
   "videos": []
