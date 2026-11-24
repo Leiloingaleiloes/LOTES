@@ -66,6 +66,13 @@
     return Promise.all([buscar(DEMO + "lotes.csv"), buscar(DEMO + "midia.json")]).then(function (r) {
       var dados = lerCsv(r[0]), midia = {};
       try { midia = JSON.parse(r[1] || "{}"); } catch (e) { midia = {}; }
+      /* fotos e vídeos marcados como ocultos no Lotes ADM não vão para o site */
+      Object.keys(midia).forEach(function (n) {
+        var m = midia[n] || {};
+        m.fotos = (m.fotos || []).filter(function (f) { return !f.oculta; });
+        m.videos = (m.videos || []).filter(function (v) { return !v.oculta; });
+        midia[n] = m;
+      });
       /* só aparecem os lotes que já têm vídeo ou foto */
       var lista = Object.keys(midia).filter(function (n) {
         var m = midia[n] || {};
