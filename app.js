@@ -139,7 +139,18 @@
       else { var sec = bn.closest(".banner"); if (sec) sec.hidden = true; }
     }
     if (h1) h1.textContent = p ? "Próximo leilão: " + p.nome : "Leilão encerrado";
-    var loc = document.querySelector(".at.loc"); if (loc) loc.style.display = "none";
+    var loc = document.querySelector(".at.loc");
+    if (loc) {
+      if (p && p.cidade) {
+        /* "Como chegar" passa a levar ao local do próximo leilão (o local vem da agenda) */
+        var irPara = function (local) { loc.href = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent((local ? local + ", " : "") + p.cidade); };
+        irPara(p.local || "");
+        if (!p.local) fetch("../AGENDA/agenda.json?t=" + Date.now(), { cache: "no-store" }).then(function (r) { return r.json(); }).then(function (A) {
+          var l = (A.leiloes || []).find(function (x) { return x.leiloeira === "Leiloingá" && x.data === p.data && x.cidade === p.cidade; });
+          if (l && l.local) irPara(l.local);
+        }).catch(function () {});
+      } else loc.style.display = "none";
+    }
     var sh = document.querySelector(".at.share");
     if (sh && p) sh.href = zapEnviar(p.nome + (p.cidade ? " · " + p.cidade : "") + " · " + quandoTxt(p) + "\n" + location.href.split("?")[0].split("#")[0]);
     var abas = document.querySelector(".abas"); if (abas) abas.style.display = "none";

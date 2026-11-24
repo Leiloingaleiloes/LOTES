@@ -220,3 +220,17 @@ footer{max-width:1100px;margin:10px auto 0;padding:0 16px 24px;text-align:center
 .vazio.encerrado .prox small{font-size:.75rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#055D20}
 .vazio.encerrado .prox strong{font-size:1.15rem}
 .btn-prox{margin-top:8px;display:inline-block;padding:10px 18px;border-radius:10px;background:#055D20;color:#fff;font-weight:700;text-decoration:none}
+
+/* atalhos: cabem 5 (Ao vivo, Como chegar, Compartilhar, Agenda, Fale conosco) */
+.atalhos{grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr)}
+.at.agenda .ic{background:#EDE7F8;color:#5B3FA8}
+@media(max-width:380px){.at{font-size:11px}.at .ic{width:34px;height:34px}}
+/* tablet deitado e computador: banner com altura controlada e atalhos compactos ao lado */
+@media(min-width:900px){
+  .topo{grid-template-columns:fit-content(66%) minmax(260px,1fr);align-items:start;gap:16px}
+  .banner{justify-self:start;max-width:100%}
+  .banner img{width:auto;max-width:100%;height:auto;max-height:min(60vh,520px);aspect-ratio:auto!important;margin:0 auto}
+  .atalhos{grid-auto-flow:row;grid-template-columns:1fr;grid-auto-rows:auto;align-content:start;gap:10px}
+  .at{flex-direction:row;justify-content:flex-start;gap:12px;padding:12px 14px;min-height:60px;font-size:14.5px;text-align:left}
+}
+@media(min-width:900px) and (max-height:700px){.banner img{max-height:56vh}.at{min-height:50px;padding:9px 12px}}
