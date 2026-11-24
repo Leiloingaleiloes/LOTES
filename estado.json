@@ -1,0 +1,16 @@
+{
+ "encerrado": true,
+ "em": "2026-11-24T15:11:26.687Z",
+ "leilao": {
+  "nome": "LEILAO ESPECIAL FIM DE ANO GUARANIAÇU - PR",
+  "data": "22/11/2026"
+ },
+ "proximo": {
+  "nome": "Leilão Especial Gado de Corte",
+  "data": "2026-11-25",
+  "hora": "19:30",
+  "cidade": "Palmital-PR",
+  "banner": "https://leiloingaleiloes.github.io/AGENDA/banners/li-2026-11-25-palmital.jpg",
+  "pagina": "https://www.leiloinga.com.br/leilao/leilao-especial-gado-de-corte-palmital-pr"
+ }
+}
