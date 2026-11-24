@@ -3,7 +3,8 @@
   "fotos": [
    {
     "src": "midia/lote-02/foto-22b5caf4.jpg",
-    "mini": "midia/lote-02/foto-22b5caf4-mini.jpg"
+    "mini": "midia/lote-02/foto-22b5caf4-mini.jpg",
+    "oculta": true
    }
   ],
   "videos": []
