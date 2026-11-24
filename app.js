@@ -116,10 +116,51 @@
     pdf: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11m0 0-4-4m4 4 4-4M5 20h14"/></svg>'
   };
 
+
+  /* ---------- leilão encerrado (botão "Encerrar no site" do Lotes ADM) ----------
+     estado.json: {encerrado:true, proximo:{nome,data,hora,cidade,banner,pagina}}
+     Com o leilão encerrado, o site não mostra lotes nem ordem de entrada e troca o banner pelo do próximo leilão. */
+  function estado() {
+    if (DEMO) return Promise.resolve({});
+    return buscar("estado.json").then(function (t) { try { return JSON.parse(t || "{}") || {}; } catch (e) { return {}; } });
+  }
+  var MESES = ["janeiro","fevereiro","março","abril","maio","junho","julho","agosto","setembro","outubro","novembro","dezembro"];
+  var SEMANA = ["domingo","segunda-feira","terça-feira","quarta-feira","quinta-feira","sexta-feira","sábado"];
+  function quandoTxt(p) {
+    var m = /^(\d{4})-(\d{2})-(\d{2})/.exec(p.data || ""); if (!m) return "";
+    var d = new Date(+m[1], +m[2] - 1, +m[3]);
+    return SEMANA[d.getDay()] + ", " + d.getDate() + " de " + MESES[d.getMonth()] + (p.hora ? ", às " + String(p.hora).replace(":", "h") : "");
+  }
+  function telaEncerrado(e) {
+    var p = e.proximo || null;
+    var bn = document.querySelector(".banner img"), h1 = document.querySelector(".banner h1");
+    if (bn) {
+      if (p && p.banner) { bn.src = p.banner; bn.alt = "Próximo leilão: " + p.nome; bn.style.aspectRatio = "auto"; }
+      else { var sec = bn.closest(".banner"); if (sec) sec.hidden = true; }
+    }
+    if (h1) h1.textContent = p ? "Próximo leilão: " + p.nome : "Leilão encerrado";
+    var loc = document.querySelector(".at.loc"); if (loc) loc.style.display = "none";
+    var sh = document.querySelector(".at.share");
+    if (sh && p) sh.href = zapEnviar(p.nome + (p.cidade ? " · " + p.cidade : "") + " · " + quandoTxt(p) + "\n" + location.href.split("?")[0].split("#")[0]);
+    var abas = document.querySelector(".abas"); if (abas) abas.style.display = "none";
+    var po = document.getElementById("p-ordem"); if (po) { po.hidden = true; po.innerHTML = ""; }
+    var alvo = document.getElementById("p-lotes") || document.getElementById("lote");
+    if (alvo) {
+      alvo.hidden = false;
+      alvo.innerHTML = '<div class="vazio encerrado"><b>Leilão encerrado</b><span>Obrigado a todos que participaram. Os lotes deste leilão já não estão mais disponíveis.</span>' +
+        (p ? '<div class="prox"><small>Próximo leilão</small><strong>' + esc(p.nome) + '</strong><span>' + esc(quandoTxt(p)) + (p.cidade ? " · " + esc(p.cidade) : "") + "</span>" +
+          (p.pagina ? '<a class="btn-prox" href="' + esc(p.pagina) + '" target="_blank" rel="noopener">Ver o próximo leilão</a>' : "") + "</div>" : "") + "</div>";
+    }
+    var tit = document.getElementById("tit"); if (tit) tit.textContent = "Leilão encerrado";
+    var sub = document.getElementById("sub"); if (sub) sub.textContent = p ? "Próximo: " + p.nome : "";
+  }
   /* ---------- página inicial ---------- */
   window.montarInicio = function () {
     var pLotes = document.getElementById("p-lotes"), pOrdem = document.getElementById("p-ordem");
     ligarAbas();
+    estado().then(function (e) { if (e.encerrado) { telaEncerrado(e); return; } montarInicioAberto(pLotes, pOrdem); });
+  };
+  function montarInicioAberto(pLotes, pOrdem) {
     Promise.all([carregar(), buscar(DEMO + "ordem.txt"), DEMO ? "" : buscar("videos.json")]).then(function (res) {
       var b = res[0], vids = blocoVideos(res[2]);
       var cont = document.getElementById("n-lotes");
@@ -134,7 +175,7 @@
         '<div class="vazio" id="vazio" hidden><b>Nenhum lote com esses filtros.</b></div>';
       ligarFiltros(pLotes);
     });
-  };
+  }
 
   /* vídeos gerais (videos.json): machos, fêmeas… */
   function blocoVideos(txt) {
@@ -270,6 +311,9 @@
     if (!(n > 0)) { location.replace(PG_INICIO); return; }
     document.title = "Lote " + n + " · Leiloingá Leilões";
     document.getElementById("tit").textContent = "Lote " + n;
+    estado().then(function (e) { if (e.encerrado) { telaEncerrado(e); return; } montarLoteAberto(alvo, n); });
+  };
+  function montarLoteAberto(alvo, n) {
     carregar().then(function (b) {
       var d = b.dados[n] || {}, m = b.midia[n] || { fotos: [], videos: [] };
       var sub = document.getElementById("sub");

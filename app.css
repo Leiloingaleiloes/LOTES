@@ -212,3 +212,11 @@ footer{max-width:1100px;margin:10px auto 0;padding:0 16px 24px;text-align:center
 .vid figcaption{padding:9px 12px;font-weight:800;font-size:15px;color:var(--brand)}
 .vid video{display:block;width:100%;aspect-ratio:9/16;max-height:75vh;background:#111;object-fit:contain}
 @media (max-width:520px){.vids{grid-template-columns:1fr}}
+
+/* leilão encerrado */
+.vazio.encerrado{display:grid;gap:8px;justify-items:center;padding:28px 20px}
+.vazio.encerrado>b{font-size:1.35rem}
+.vazio.encerrado .prox{display:grid;gap:4px;justify-items:center;margin-top:10px;padding:16px 18px;border-radius:14px;background:rgba(5,93,32,.07);width:min(460px,100%)}
+.vazio.encerrado .prox small{font-size:.75rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#055D20}
+.vazio.encerrado .prox strong{font-size:1.15rem}
+.btn-prox{margin-top:8px;display:inline-block;padding:10px 18px;border-radius:10px;background:#055D20;color:#fff;font-weight:700;text-decoration:none}
