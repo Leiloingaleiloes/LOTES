@@ -1,0 +1,29 @@
+name: Juntar vídeos dos lotes (machos e fêmeas)
+# O botão "Juntar vídeos" do Lotes ADM grava pedido-videos.json; esta rotina junta os vídeos
+# em juntos/machos.mp4 e juntos/femeas.mp4.
+on:
+  push:
+    branches: [main]
+    paths: ["pedido-videos.json"]
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: juntar-videos
+  cancel-in-progress: true
+jobs:
+  juntar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg fonts-dejavu-core >/dev/null
+      - run: python3 .github/ferramentas/juntar_videos.py
+      - name: Salvar
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898333+github-actions[bot]@users.noreply.github.com"
+          git add -A juntos
+          if ! git diff --cached --quiet; then
+            git commit -m "Vídeos juntos: machos e fêmeas"
+            for i in 1 2 3; do git pull --rebase origin main && git push && break; sleep 5; done
+          fi
