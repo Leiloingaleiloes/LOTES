@@ -3,7 +3,8 @@
   "fotos": [
    {
     "src": "arquivo/2026-11-22/lote-02/foto-22b5caf4.jpg",
-    "mini": "arquivo/2026-11-22/lote-02/foto-22b5caf4-mini.jpg"
+    "mini": "arquivo/2026-11-22/lote-02/foto-22b5caf4-mini.jpg",
+    "oculta": true
    }
   ]
  },
@@ -11,8 +12,7 @@
   "fotos": [
    {
     "src": "arquivo/2026-11-22/lote-03/foto-429a2773.jpg",
-    "mini": "arquivo/2026-11-22/lote-03/foto-429a2773-mini.jpg",
-    "oculta": true
+    "mini": "arquivo/2026-11-22/lote-03/foto-429a2773-mini.jpg"
    }
   ]
  },
