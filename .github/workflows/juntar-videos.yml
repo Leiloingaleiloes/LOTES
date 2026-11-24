@@ -1,0 +1,83 @@
+name: Juntar videos dos lotes
+run-name: Juntar videos ${{ inputs.pedido }}
+
+# Chamada pelo botão "Juntar vídeos" do Lotes ADM.
+# Junta os vídeos (machos e depois fêmeas, pelo número do lote) num vídeo só,
+# com "LOTE 03" em cada trecho, e guarda o resultado num ramo separado
+# ("videos" ou "videos-teste"), que não pesa o site. Cada vídeo novo substitui o anterior.
+
+on:
+  workflow_dispatch:
+    inputs:
+      pasta:
+        description: '"" para o site, "teste-v2/" para a versão de teste'
+        required: false
+        default: ""
+      lista:
+        description: "lote:caminho do vídeo, separados por ;"
+        required: true
+      pedido:
+        description: "código do pedido (letras minúsculas e números)"
+        required: true
+
+permissions:
+  contents: write
+
+concurrency:
+  group: juntar-videos
+  cancel-in-progress: false
+
+jobs:
+  juntar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Conferir o pedido
+        id: conf
+        env:
+          PASTA: ${{ inputs.pasta }}
+          PEDIDO: ${{ inputs.pedido }}
+        run: |
+          case "$PASTA" in
+            "")        echo "ramo=videos" >> "$GITHUB_OUTPUT"; echo "midia=midia" >> "$GITHUB_OUTPUT" ;;
+            "teste-v2/") echo "ramo=videos-teste" >> "$GITHUB_OUTPUT"; echo "midia=teste-v2/midia" >> "$GITHUB_OUTPUT" ;;
+            *) echo "pasta inválida"; exit 1 ;;
+          esac
+          [[ "$PEDIDO" =~ ^[a-z0-9]{6,24}$ ]] || { echo "pedido inválido"; exit 1; }
+
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          filter: blob:none
+          sparse-checkout: |
+            .github
+            ${{ steps.conf.outputs.midia }}
+
+      - name: Instalar ferramentas
+        run: |
+          if ! which ffmpeg >/dev/null || [ ! -f /usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf ]; then
+            sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg fonts-dejavu-core
+          fi
+
+      - name: Juntar
+        env:
+          PASTA: ${{ inputs.pasta }}
+          LISTA: ${{ inputs.lista }}
+          PEDIDO: ${{ inputs.pedido }}
+          SAIDA: ${{ runner.temp }}/saida
+        run: python3 .github/scripts/juntar_videos.py
+
+      - name: Guardar no ramo separado
+        env:
+          RAMO: ${{ steps.conf.outputs.ramo }}
+          SAIDA: ${{ runner.temp }}/saida
+          TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+        run: |
+          cd "$SAIDA"
+          git init -q -b "$RAMO"
+          git config user.name "Atualizador do site"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -q -m "Vídeo dos lotes juntos"
+          git push -q --force "https://x-access-token:${TOKEN}@github.com/${REPO}.git" "HEAD:refs/heads/${RAMO}"
