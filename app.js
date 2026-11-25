@@ -173,9 +173,12 @@
     fetch("../AGENDA/agenda.json?t=" + Date.now(), { cache: "no-store" }).then(function (r) { return r.json(); }).then(function (A) {
       var l = (A.leiloes || []).find(function (x) { return x.leiloeira === "Leiloingá" && x.data === dataIso; });
       var m = l && /(?:v=|youtu\.be\/|live\/|embed\/)([\w-]{11})/.exec(String(l.youtube || "")); if (!m) return;
-      var alt = "https://i.ytimg.com/vi/" + m[1] + "/hqdefault.jpg";
-      bn.onerror = function () { bn.onerror = null; bn.src = alt; };
-      bn.src = "https://i.ytimg.com/vi/" + m[1] + "/maxresdefault.jpg"; bn.style.aspectRatio = "16/9"; bn.style.objectFit = "cover";
+      /* começa pela capa de 640px (sempre existe) e troca pela de 1280px só se ela existir de verdade:
+         quando não existe, o YouTube devolve uma imagem cinza de 120px em vez de dar erro */
+      var base = "https://i.ytimg.com/vi/" + m[1] + "/";
+      bn.onerror = function () { bn.onerror = null; bn.src = base + "hqdefault.jpg"; };
+      bn.src = base + "sddefault.jpg"; bn.style.aspectRatio = "16/9"; bn.style.objectFit = "cover";
+      var g = new Image(); g.onload = function () { if (g.naturalWidth > 200) bn.src = base + "maxresdefault.jpg"; }; g.src = base + "maxresdefault.jpg";
       var sec = bn.closest(".banner"); if (sec) { sec.hidden = false; sec.classList.add("yt"); }
     }).catch(function () {});
   }
