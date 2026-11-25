@@ -138,7 +138,7 @@
       if (p && p.banner) { bn.src = p.banner; bn.alt = "Próximo leilão: " + p.nome; bn.style.aspectRatio = "auto"; }
       else { var sec = bn.closest(".banner"); if (sec) sec.hidden = true; }
     }
-    if (h1) h1.textContent = p ? "Próximo leilão: " + p.nome : "Leilão encerrado";
+    if (h1) h1.textContent = p ? "Próximo leilão: " + p.nome : "Próximo leilão em breve";
     var loc = document.querySelector(".at.loc");
     if (loc) {
       if (p && p.cidade) {
@@ -158,11 +158,12 @@
     var alvo = document.getElementById("p-lotes") || document.getElementById("lote");
     if (alvo) {
       alvo.hidden = false;
-      alvo.innerHTML = '<div class="vazio encerrado"><b>Leilão encerrado</b><span>Obrigado a todos que participaram. Os lotes deste leilão já não estão mais disponíveis.</span>' +
+      /* sem "leilão encerrado": a página já mostra só o próximo leilão */
+      alvo.innerHTML = '<div class="vazio encerrado">' + (p ? '' : '<b>Em breve</b><span>Os lotes do próximo leilão aparecem aqui assim que forem publicados.</span>') +
         (p ? '<div class="prox"><small>Próximo leilão</small><strong>' + esc(p.nome) + '</strong><span>' + esc(quandoTxt(p)) + (p.cidade ? " · " + esc(p.cidade) : "") + "</span>" +
           (p.pagina ? '<a class="btn-prox" href="' + esc(p.pagina) + '" target="_blank" rel="noopener">Ver o próximo leilão</a>' : "") + "</div>" : "") + "</div>";
     }
-    var tit = document.getElementById("tit"); if (tit) tit.textContent = "Leilão encerrado";
+    var tit = document.getElementById("tit"); if (tit) tit.textContent = e.proximo ? "Próximo leilão" : "Próximo leilão em breve";
     var sub = document.getElementById("sub"); if (sub) sub.textContent = p ? "Próximo: " + p.nome : "";
   }
   /* ---------- banner do YouTube (16:9, ocupa menos a altura da página) ----------
