@@ -138,7 +138,7 @@
       if (p && p.banner) { bn.src = p.banner; bn.alt = "Próximo leilão: " + p.nome; bn.style.aspectRatio = "auto"; }
       else { var sec = bn.closest(".banner"); if (sec) sec.hidden = true; }
     }
-    if (h1) h1.textContent = p ? "Próximo leilão: " + p.nome : "Leilão encerrado";
+    if (h1) h1.textContent = p ? "Próximo leilão: " + p.nome : "Próximo leilão em breve";
     var loc = document.querySelector(".at.loc");
     if (loc) {
       if (p && p.cidade) {
@@ -158,18 +158,37 @@
     var alvo = document.getElementById("p-lotes") || document.getElementById("lote");
     if (alvo) {
       alvo.hidden = false;
-      alvo.innerHTML = '<div class="vazio encerrado"><b>Leilão encerrado</b><span>Obrigado a todos que participaram. Os lotes deste leilão já não estão mais disponíveis.</span>' +
+      /* sem "leilão encerrado": a página já mostra só o próximo leilão */
+      alvo.innerHTML = '<div class="vazio encerrado">' + (p ? '' : '<b>Em breve</b><span>Os lotes do próximo leilão aparecem aqui assim que forem publicados.</span>') +
         (p ? '<div class="prox"><small>Próximo leilão</small><strong>' + esc(p.nome) + '</strong><span>' + esc(quandoTxt(p)) + (p.cidade ? " · " + esc(p.cidade) : "") + "</span>" +
           (p.pagina ? '<a class="btn-prox" href="' + esc(p.pagina) + '" target="_blank" rel="noopener">Ver o próximo leilão</a>' : "") + "</div>" : "") + "</div>";
     }
-    var tit = document.getElementById("tit"); if (tit) tit.textContent = "Leilão encerrado";
+    var tit = document.getElementById("tit"); if (tit) tit.textContent = e.proximo ? "Próximo leilão" : "Próximo leilão em breve";
     var sub = document.getElementById("sub"); if (sub) sub.textContent = p ? "Próximo: " + p.nome : "";
   }
+  /* ---------- banner do YouTube (16:9, ocupa menos a altura da página) ----------
+     Quando o leilão tem a transmissão marcada no YouTube (agenda), a capa do vídeo vira o banner. */
+  function bannerYT(dataIso) {
+    var bn = document.querySelector(".banner img"); if (!bn || !dataIso) return;
+    fetch("../AGENDA/agenda.json?t=" + Date.now(), { cache: "no-store" }).then(function (r) { return r.json(); }).then(function (A) {
+      var l = (A.leiloes || []).find(function (x) { return x.leiloeira === "Leiloingá" && x.data === dataIso; });
+      var m = l && /(?:v=|youtu\.be\/|live\/|embed\/)([\w-]{11})/.exec(String(l.youtube || "")); if (!m) return;
+      var alt = "https://i.ytimg.com/vi/" + m[1] + "/hqdefault.jpg";
+      bn.onerror = function () { bn.onerror = null; bn.src = alt; };
+      bn.src = "https://i.ytimg.com/vi/" + m[1] + "/maxresdefault.jpg"; bn.style.aspectRatio = "16/9"; bn.style.objectFit = "cover";
+      var sec = bn.closest(".banner"); if (sec) { sec.hidden = false; sec.classList.add("yt"); }
+    }).catch(function () {});
+  }
+  function isoBr(d) { var m = /(\d{2})\/(\d{2})\/(\d{4})/.exec(d || ""); return m ? m[3] + "-" + m[2] + "-" + m[1] : (/^\d{4}-\d{2}-\d{2}/.test(d || "") ? d.slice(0, 10) : ""); }
   /* ---------- página inicial ---------- */
   window.montarInicio = function () {
     var pLotes = document.getElementById("p-lotes"), pOrdem = document.getElementById("p-ordem");
     ligarAbas();
-    estado().then(function (e) { if (e.encerrado) { telaEncerrado(e); return; } montarInicioAberto(pLotes, pOrdem); });
+    estado().then(function (e) {
+      if (e.encerrado) { telaEncerrado(e); if (e.proximo) bannerYT(isoBr(e.proximo.data)); return; }
+      montarInicioAberto(pLotes, pOrdem);
+      buscar("leilao.json").then(function (t) { try { bannerYT(isoBr(JSON.parse(t).data)); } catch (er) {} });
+    });
   };
   function montarInicioAberto(pLotes, pOrdem) {
     Promise.all([carregar(), buscar(DEMO + "ordem.txt"), DEMO ? "" : buscar("videos.json")]).then(function (res) {
