@@ -1,13 +1,10 @@
 name: Prévia do link do catálogo
 # Troca sozinho a imagem e o texto que aparecem quando o link do catálogo é colado no WhatsApp,
 # sempre deixando o PRÓXIMO leilão da agenda (quando o leilão do site está encerrado).
+# Roda só às segundas e quintas, como todas as atualizações de leilão. Para forçar fora do dia: aba Actions > Run workflow.
 on:
   schedule:
-    - cron: "40 11,17 * * *"   # 08h40 e 14h40 em Brasília (depois dos banners da agenda)
-    - cron: "20 3 * * *"       # 00h20 em Brasília (vira o dia)
-  push:
-    branches: [main]
-    paths: ["estado.json"]
+    - cron: "40 11,17 * * 1,4"   # só segunda e quinta, 08h40 e 14h40 em Brasília (depois dos banners da agenda)
   workflow_dispatch:
 permissions:
   contents: write
