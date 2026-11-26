@@ -122,7 +122,30 @@
      Com o leilão encerrado, o site não mostra lotes nem ordem de entrada e troca o banner pelo do próximo leilão. */
   function estado() {
     if (DEMO) return Promise.resolve({});
-    return buscar("estado.json").then(function (t) { try { return JSON.parse(t || "{}") || {}; } catch (e) { return {}; } });
+    return buscar("estado.json").then(function (t) { try { return JSON.parse(t || "{}") || {}; } catch (e) { return {}; } })
+      .then(function (e) { return e.encerrado ? proximoDaAgenda(e) : e; });
+  }
+  /* O "próximo leilão" é sempre calculado na hora a partir da agenda (AGENDA/agenda.json):
+     o primeiro leilão da Leiloingá que ainda não passou (com folga de 6 h depois do início).
+     Assim a data e a imagem se atualizam sozinhas, sem ninguém precisar mexer no estado.json. */
+  var AG_RAW = "https://raw.githubusercontent.com/Leiloingaleiloes/AGENDA/main/";
+  var AG_SITE = "https://leiloingaleiloes.github.io/AGENDA/";
+  function proximoDaAgenda(e) {
+    function ler(u) { return fetch(u + "agenda.json?t=" + Date.now(), { cache: "no-store" }).then(function (r) { if (!r.ok) throw r; return r.json(); }); }
+    return ler(AG_RAW).catch(function () { return ler("../AGENDA/"); }).then(function (A) {
+      var agora = Date.now() - 6 * 3600e3;
+      var l = (A.leiloes || []).filter(function (x) {
+        var m = /^(\d{4})-(\d{2})-(\d{2})/.exec(x.data || "");
+        if (x.leiloeira !== "Leiloingá" || !m) return false;
+        var h = /^(\d{1,2}):(\d{2})/.exec(x.hora || "");
+        return new Date(+m[1], +m[2] - 1, +m[3], h ? +h[1] : 0, h ? +h[2] : 0).getTime() >= agora;
+      }).sort(function (a, b) { return (a.data + (a.hora || "")).localeCompare(b.data + (b.hora || "")); })[0];
+      if (!l) return e;
+      var ban = l.bannerLocal ? AG_SITE + l.bannerLocal + "?v=" + encodeURIComponent((A.atualizadoEm || "").slice(0, 10)) : (l.banner || "");
+      var out = {}; for (var k in e) out[k] = e[k];
+      out.proximo = { nome: l.nome, data: l.data, hora: l.hora || "", cidade: l.cidade || "", local: l.local || "", banner: ban, pagina: l.pagina || "" };
+      return out;
+    }).catch(function () { return e; });
   }
   var MESES = ["janeiro","fevereiro","março","abril","maio","junho","julho","agosto","setembro","outubro","novembro","dezembro"];
   var SEMANA = ["domingo","segunda-feira","terça-feira","quarta-feira","quinta-feira","sexta-feira","sábado"];
